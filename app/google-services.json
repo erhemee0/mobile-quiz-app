@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884654889915",
+    "project_id": "bie-daalt-8d8e7",
+    "storage_bucket": "bie-daalt-8d8e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884654889915:android:0f79a007001a064cc6029e",
+        "android_client_info": {
+          "package_name": "com.example.biedaalt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-dSTYijy7m8ibwJl_sqNR6fpQq1KHpsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
