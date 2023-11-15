@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:text="Энэ ямар улсын далбай вэ?"
+            android:text="Энэ ямар улсын далбаа вэ?"
             android:textColor="#363A43"
             android:textSize="22sp"
             android:textStyle="bold" />

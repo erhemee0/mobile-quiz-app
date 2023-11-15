@@ -92,7 +92,7 @@ public class QuizQuestionActivity extends AppCompatActivity implements View.OnCl
 
                 goToMainActivity();
             }
-        }, 3000); // 3000 milliseconds (3 seconds) delay
+        }, 5000); // 3000 milliseconds (3 seconds) delay
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
