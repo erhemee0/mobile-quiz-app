@@ -98,6 +98,7 @@ public class QuizQuestionActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mQuestionList = new ArrayList<>();
+                Toast.makeText(QuizQuestionActivity.this, String.valueOf(dataSnapshot.getChildrenCount()), Toast.LENGTH_SHORT).show();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     try {
                         Question question = new Question(
