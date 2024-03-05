@@ -282,30 +282,29 @@ public class QuizQuestionActivity extends AppCompatActivity implements View.OnCl
 
 
     private void answerView(int answer, int drawableView) {
+        TextView selectedOption = null;
+    
         switch (answer) {
             case 1:
-                if (tvOptionOne != null) {
-                    tvOptionOne.setBackground(ContextCompat.getDrawable(this, drawableView));
-                }
+                selectedOption = tvOptionOne;
                 break;
-
+    
             case 2:
-                if (tvOptionTwo != null) {
-                    tvOptionTwo.setBackground(ContextCompat.getDrawable(this, drawableView));
-                }
+                selectedOption = tvOptionTwo;
                 break;
-
+    
             case 3:
-                if (tvOptionThree != null) {
-                    tvOptionThree.setBackground(ContextCompat.getDrawable(this, drawableView));
-                }
+                selectedOption = tvOptionThree;
                 break;
-
+    
             case 4:
-                if (tvOptionFour != null) {
-                    tvOptionFour.setBackground(ContextCompat.getDrawable(this, drawableView));
-                }
+                selectedOption = tvOptionFour;
                 break;
         }
+    
+        if (selectedOption != null) {
+            selectedOption.setBackground(ContextCompat.getDrawable(this, drawableView));
+        }
     }
+
 }
