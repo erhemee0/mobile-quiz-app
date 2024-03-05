@@ -218,67 +218,55 @@ public class QuizQuestionActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        boolean isAnswerNotSubmitDone = (btnSubmit.getText().equals("Сонгох"));
-        int viewId = view.getId();
+    boolean isSubmitPhase = btnSubmit.getText().equals("Сонгох");
+    int viewId = view.getId();
 
-        if (viewId == R.id.tv_option_one && isAnswerNotSubmitDone) {
-            if (tvOptionOne != null) {
-                selectedOptionView(tvOptionOne, 1);
-            }
-        } else if (viewId == R.id.tv_option_two && isAnswerNotSubmitDone) {
-            if (tvOptionTwo != null) {
-                selectedOptionView(tvOptionTwo, 2);
-            }
-        } else if (viewId == R.id.tv_option_three && isAnswerNotSubmitDone) {
-            if (tvOptionThree != null) {
-                selectedOptionView(tvOptionThree, 3);
-            }
-        } else if (viewId == R.id.tv_option_four && isAnswerNotSubmitDone) {
-            if (tvOptionFour != null) {
-                selectedOptionView(tvOptionFour, 4);
-            }
-        } else if (viewId == R.id.btn_submit && btnSubmit != null) {
-            if (mSelectedOptionPosition == 0) {
-                if (isSelectedAnswer) {
-                    isSelectedAnswer = false;
+    // Handling Option Selections
+    if (isSubmitPhase) {
+        int selectedOption = 0;
+        if (viewId == R.id.tv_option_one) selectedOption = 1;
+        else if (viewId == R.id.tv_option_two) selectedOption = 2;
+        else if (viewId == R.id.tv_option_three) selectedOption = 3;
+        else if (viewId == R.id.tv_option_four) selectedOption = 4;
 
-                    mCurrentPosition++;
-
-                    if (mCurrentPosition <= mQuestionList.size()) {
-                        setQuestionList();
-                    } else {
-                        Intent intent = new Intent(this, ResultActivity.class);
-                        intent.putExtra(Constants.USER_NAME, mUserName);
-                        intent.putExtra(Constants.CORRECT_ANSWER, mCorrectAnswer);
-                        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList.size());
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Toast.makeText(this, "Хариултаа сонгоно уу", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Question question = mQuestionList.get(mCurrentPosition - 1);
-
-                if (question != null) {
-                    if (question.getCorrectAnswer() != mSelectedOptionPosition) {
-                        answerView(mSelectedOptionPosition, R.drawable.wrong_option_border_bg);
-                    } else {
-                        mCorrectAnswer++;
-                    }
-                    answerView(question.getCorrectAnswer(), R.drawable.correct_option_border_bg);
-
-                    if (mCurrentPosition == mQuestionList.size()) {
-                        btnSubmit.setText("Дуусгах");
-                    } else {
-                        btnSubmit.setText("Дараагийн асуулт");
-                    }
-
-                    mSelectedOptionPosition = 0;
-                }
-            }
+        if (selectedOption > 0) {
+            selectedOptionView(new TextView[]{tvOptionOne, tvOptionTwo, tvOptionThree, tvOptionFour}[selectedOption - 1], selectedOption);
         }
     }
+
+    // Handling Submit Button Logic
+    if (viewId == R.id.btn_submit && btnSubmit != null) {
+        if (mSelectedOptionPosition == 0) {
+            if (!isSelectedAnswer) {
+                Toast.makeText(this, "Хариултаа сонгоно уу", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            mCurrentPosition++;
+            if (mCurrentPosition <= mQuestionList.size()) {
+                setQuestionList();
+            } else {
+                finishQuiz();
+            }
+        } else {
+            Question question = mQuestionList.get(mCurrentPosition - 1);
+            if (question != null) {
+                answerView(mSelectedOptionPosition, question.getCorrectAnswer() != mSelectedOptionPosition ? R.drawable.wrong_option_border_bg : R.drawable.correct_option_border_bg);
+                if (question.getCorrectAnswer() == mSelectedOptionPosition) mCorrectAnswer++;
+            }
+            btnSubmit.setText(mCurrentPosition == mQuestionList.size() ? "Дуусгах" : "Дараагийн асуулт");
+            mSelectedOptionPosition = 0;
+        }
+    }
+}
+
+private void finishQuiz() {
+    Intent intent = new Intent(this, ResultActivity.class);
+    intent.putExtra(Constants.USER_NAME, mUserName);
+    intent.putExtra(Constants.CORRECT_ANSWER, mCorrectAnswer);
+    intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList.size());
+    startActivity(intent);
+    finish();
+}
 
 
     private void answerView(int answer, int drawableView) {
