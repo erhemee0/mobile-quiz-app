@@ -218,46 +218,74 @@ public class QuizQuestionActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-    boolean isSubmitPhase = btnSubmit.getText().equals("Сонгох");
-    int viewId = view.getId();
-
-    // Handling Option Selections
-    if (isSubmitPhase) {
+        boolean isSubmitPhase = btnSubmit.getText().equals("Сонгох");
+        int viewId = view.getId();
+    
+        // Handling Option Selections
+        if (isSubmitPhase) {
+            handleOptionSelection(viewId);
+        }
+    
+        // Handling Submit Button Logic
+        if (viewId == R.id.btn_submit && btnSubmit != null) {
+            handleSubmitButtonLogic();
+        }
+    }
+    
+    private void handleOptionSelection(int viewId) {
         int selectedOption = 0;
-        if (viewId == R.id.tv_option_one) selectedOption = 1;
-        else if (viewId == R.id.tv_option_two) selectedOption = 2;
-        else if (viewId == R.id.tv_option_three) selectedOption = 3;
-        else if (viewId == R.id.tv_option_four) selectedOption = 4;
-
+    
+        switch (viewId) {
+            case R.id.tv_option_one:
+                selectedOption = 1;
+                break;
+            case R.id.tv_option_two:
+                selectedOption = 2;
+                break;
+            case R.id.tv_option_three:
+                selectedOption = 3;
+                break;
+            case R.id.tv_option_four:
+                selectedOption = 4;
+                break;
+        }
+    
         if (selectedOption > 0) {
             selectedOptionView(new TextView[]{tvOptionOne, tvOptionTwo, tvOptionThree, tvOptionFour}[selectedOption - 1], selectedOption);
         }
     }
-
-    // Handling Submit Button Logic
-    if (viewId == R.id.btn_submit && btnSubmit != null) {
+    
+    private void handleSubmitButtonLogic() {
         if (mSelectedOptionPosition == 0) {
-            if (!isSelectedAnswer) {
-                Toast.makeText(this, "Хариултаа сонгоно уу", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            mCurrentPosition++;
-            if (mCurrentPosition <= mQuestionList.size()) {
-                setQuestionList();
-            } else {
-                finishQuiz();
-            }
+            handleNoSelectedOption();
         } else {
-            Question question = mQuestionList.get(mCurrentPosition - 1);
-            if (question != null) {
-                answerView(mSelectedOptionPosition, question.getCorrectAnswer() != mSelectedOptionPosition ? R.drawable.wrong_option_border_bg : R.drawable.correct_option_border_bg);
-                if (question.getCorrectAnswer() == mSelectedOptionPosition) mCorrectAnswer++;
-            }
-            btnSubmit.setText(mCurrentPosition == mQuestionList.size() ? "Дуусгах" : "Дараагийн асуулт");
-            mSelectedOptionPosition = 0;
+            handleSelectedOption();
         }
     }
-}
+    
+    private void handleNoSelectedOption() {
+        if (!isSelectedAnswer) {
+            showToast("Хариултаа сонгоно уу");
+            return;
+        }
+        mCurrentPosition++;
+        if (mCurrentPosition <= mQuestionList.size()) {
+            setQuestionList();
+        } else {
+            finishQuiz();
+        }
+    }
+    
+    private void handleSelectedOption() {
+        Question question = mQuestionList.get(mCurrentPosition - 1);
+        if (question != null) {
+            int drawableId = question.getCorrectAnswer() != mSelectedOptionPosition ? R.drawable.wrong_option_border_bg : R.drawable.correct_option_border_bg;
+            answerView(mSelectedOptionPosition, drawableId);
+            if (question.getCorrectAnswer() == mSelectedOptionPosition) mCorrectAnswer++;
+        }
+        btnSubmit.setText(mCurrentPosition == mQuestionList.size() ? "Дуусгах" : "Дараагийн асуулт");
+        mSelectedOptionPosition = 0;
+    }
 
 private void finishQuiz() {
     Intent intent = new Intent(this, ResultActivity.class);
